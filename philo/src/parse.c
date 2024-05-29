@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 10:36:00 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/25 16:30:41 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:42:34 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	parse_args(t_data *data, char **argv)
 	data->time_to_die = ft_atol(argv[2]);
 	data->time_to_eat = ft_atol(argv[3]);
 	data->time_to_sleep = ft_atol(argv[4]);
-	if (data->number_of_philo < 2)
-		error("Error: number of philosophers must be at least 2");
 	if (data->time_to_die < 60 || data->time_to_eat < 60
 		|| data->time_to_sleep < 60)
 		error("Error: time must be at least 60ms");
