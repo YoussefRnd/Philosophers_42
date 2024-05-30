@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 14:41:53 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:53:32 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,31 @@ void	print_status(t_data *data, int id, char *status)
 
 void	*routine(void *arg)
 {
-	t_data	*data;
+	t_philo	*philo;
 
-	data = (t_data *)arg;
+	philo = (t_philo *)arg;
+	printf("philo pointer: %p\n", philo);
 	while (true)
 	{
-		pthread_mutex_lock(data->philo->left_fork);
-		print_status(data, data->philo->id, "has taken a fork");
-		pthread_mutex_lock(data->philo->right_fork);
-		print_status(data, data->philo->id, "has taken a fork");
-		print_status(data, data->philo->id, "is eating");
-		data->philo->last_meal = get_time();
-		usleep(data->time_to_eat * 1000);
-		pthread_mutex_unlock(data->philo->right_fork);
-		pthread_mutex_unlock(data->philo->left_fork);
-		data->philo->meals_eaten++;
-		if (data->philo_eat_frequency != -1
-			&& data->philo->meals_eaten >= data->philo_eat_frequency)
+		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(philo->right_fork);
+		print_status(philo->data, philo->id, "has taken a fork");
+		print_status(philo->data, philo->id, "is eating");
+		philo->last_meal = get_time();
+		usleep(philo->data->time_to_eat * 1000);
+		print_status(philo->data, philo->id, "has dropped a fork");
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+		philo->meals_eaten++;
+		if (philo->data->philo_eat_frequency != -1
+			&& philo->meals_eaten >= philo->data->philo_eat_frequency)
 		{
-			data->philo->is_philo_full = true;
+			philo->is_philo_full = true;
 			break ;
 		}
-		print_status(data, data->philo->id, "is sleeping");
-		usleep(data->time_to_sleep * 1000);
-		print_status(data, data->philo->id, "is thinking");
+		print_status(philo->data, philo->id, "is sleeping");
+		usleep(philo->data->time_to_sleep * 1000);
+		print_status(philo->data, philo->id, "is thinking");
 	}
 	return (NULL);
 }
@@ -93,6 +94,7 @@ void	start_simulation(t_data *data)
 			error("Error: pthread_create failed");
 	}
 	monitor(data);
+	printf("I'm here\n");
 	for (i = 0; i < data->number_of_philo; i++)
 	{
 		if (pthread_join(data->philo[i].thread, NULL) != 0)

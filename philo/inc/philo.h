@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 13:54:03 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:43:53 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
+	pthread_mutex_t mutex;
 	bool			is_philo_full;
 	long			last_meal;
 	int				meals_eaten;
