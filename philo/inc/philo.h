@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 14:43:53 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:22:03 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,35 @@
 typedef struct s_data	t_data;
 typedef struct s_philo
 {
-	int				id;
-	pthread_t		thread;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t mutex;
-	bool			is_philo_full;
-	long			last_meal;
-	int				meals_eaten;
-	t_data			*data;
-}					t_philo;
+	int					id;
+	pthread_t			thread;
+	pthread_mutex_t		*right_fork;
+	pthread_mutex_t		*left_fork;
+	pthread_mutex_t		mutex;
+	bool				is_philo_full;
+	long				last_meal;
+	int					meals_eaten;
+	t_data				*data;
+}						t_philo;
 
 typedef struct s_data
 {
-	int				number_of_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				philo_eat_frequency;
-	long			start_time;
-	t_philo			*philo;
-	pthread_mutex_t	*fork;
-}					t_data;
+	int					number_of_philo;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_to_sleep;
+	int					philo_eat_frequency;
+	long				start_time;
+	t_philo				*philo;
+	pthread_mutex_t		*fork;
+}						t_data;
 
-void				parse_args(t_data *data, char **argv);
+void					parse_args(t_data *data, char **argv);
 
-void				error(char *message);
+void					error(char *message);
 
-void				init_data(t_data *data);
+void					init_data(t_data *data);
 
-void				start_simulation(t_data *data);
+void					start_simulation(t_data *data);
 
 #endif

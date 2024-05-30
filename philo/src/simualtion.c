@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 14:53:32 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:43:30 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	printf("philo pointer: %p\n", philo);
 	while (true)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -78,7 +77,6 @@ void	monitor(t_data *data)
 			if (data->philo[i].is_philo_full)
 				return ;
 		}
-		usleep(1000);
 	}
 }
 
@@ -94,7 +92,6 @@ void	start_simulation(t_data *data)
 			error("Error: pthread_create failed");
 	}
 	monitor(data);
-	printf("I'm here\n");
 	for (i = 0; i < data->number_of_philo; i++)
 	{
 		if (pthread_join(data->philo[i].thread, NULL) != 0)

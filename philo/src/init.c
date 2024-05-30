@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:24:28 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 14:33:47 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:48:23 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,20 @@ void	init_data(t_data *data)
 	i = 0;
 	while (i < data->number_of_philo)
 	{
+		data->philo[i].data = data;
 		data->philo[i].id = i + 1;
 		data->philo[i].is_philo_full = false;
 		if (pthread_mutex_init(&data->fork[i], NULL) != 0)
 			error("Error: mutex init failed");
 		data->philo[i].left_fork = &data->fork[(i + 1) % data->number_of_philo];
 		data->philo[i].right_fork = &data->fork[i];
+		if (data->philo->id % 2 == 0)
+		{
+			data->philo[i].right_fork = &data->fork[(i + 1)
+				% data->number_of_philo];
+			data->philo[i].left_fork = &data->fork[i];
+		}
 		i++;
 	}
+	pthread_mutex_init(&data->philo->mutex, NULL);
 }
