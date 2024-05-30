@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 10:36:00 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/27 16:42:34 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/30 13:20:43 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*is_valid(char *str)
 	return (number);
 }
 
-static long	ft_atol(const char *str)
+static long	ft_atol(char *str)
 {
 	long	num;
 
