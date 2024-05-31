@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:24:28 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 16:48:23 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:52:29 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,4 @@ void	init_data(t_data *data)
 		}
 		i++;
 	}
-	pthread_mutex_init(&data->philo->mutex, NULL);
 }

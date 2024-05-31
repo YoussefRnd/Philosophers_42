@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/30 16:22:03 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/05/31 17:05:47 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_philo
 	pthread_t			thread;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
-	pthread_mutex_t		mutex;
 	bool				is_philo_full;
 	long				last_meal;
 	int					meals_eaten;
@@ -46,6 +45,9 @@ typedef struct s_data
 	long				start_time;
 	t_philo				*philo;
 	pthread_mutex_t		*fork;
+	bool				simulation_end;
+	pthread_mutex_t		print_mutex;
+	pthread_mutex_t		mutex;
 }						t_data;
 
 void					parse_args(t_data *data, char **argv);
@@ -55,5 +57,12 @@ void					error(char *message);
 void					init_data(t_data *data);
 
 void					start_simulation(t_data *data);
+
+void					set_value(pthread_mutex_t *mutex, long *arg,
+							long value);
+void					set_bool(pthread_mutex_t *mutex, bool *arg, bool value);
+
+long					get_value(pthread_mutex_t *mutex, long *arg);
+bool					get_bool(pthread_mutex_t *mutex, bool *arg);
 
 #endif
