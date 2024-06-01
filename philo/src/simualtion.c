@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/31 17:42:37 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/01 20:36:10 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_status(t_data *data, int id, char *status)
 	pthread_mutex_unlock(&data->print_mutex);
 }
 
-void	my_usleep(int ms)
+void	_usleep(int ms)
 {
 	long	start_time;
 	long	end_time;
@@ -43,6 +43,37 @@ void	my_usleep(int ms)
 	end_time = start_time + ms;
 	while (get_time() < end_time)
 		usleep(85);
+}
+
+void	eating(t_philo *philo, t_data *data)
+{
+	pthread_mutex_lock(philo->left_fork);
+	print_status(data, philo->id, "has taken a fork");
+	pthread_mutex_lock(philo->right_fork);
+	if (get_bool(&data->mutex, &data->simulation_end))
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+		return ;
+	}
+	print_status(data, philo->id, "has taken a fork");
+	print_status(data, philo->id, "is eating");
+	set_value(&data->mutex, &philo->last_meal, get_time());
+	_usleep(data->time_to_eat);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
+	philo->meals_eaten++;
+}
+
+void	sleeping(t_philo *philo, t_data *data)
+{
+	print_status(data, philo->id, "is sleeping");
+	_usleep(data->time_to_sleep);
+}
+
+void	thinking(t_philo *philo, t_data *data)
+{
+	print_status(data, philo->id, "is thinking");
 }
 
 void	*routine(void *arg)
@@ -54,30 +85,15 @@ void	*routine(void *arg)
 	data = philo->data;
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
-		pthread_mutex_lock(philo->left_fork);
-		pthread_mutex_lock(philo->right_fork);
-		if (get_bool(&data->mutex, &data->simulation_end))
-		{
-			pthread_mutex_unlock(philo->right_fork);
-			pthread_mutex_unlock(philo->left_fork);
-			break ;
-		}
-		print_status(data, philo->id, "has taken a fork");
-		print_status(data, philo->id, "is eating");
-		set_value(&data->mutex, &philo->last_meal, get_time());
-		my_usleep(data->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-		philo->meals_eaten++;
+		thinking(philo, data);
+		eating(philo, data);
 		if (data->philo_eat_frequency != -1
 			&& philo->meals_eaten >= data->philo_eat_frequency)
 		{
 			set_bool(&data->mutex, &philo->is_philo_full, true);
 			break ;
 		}
-		print_status(data, philo->id, "is sleeping");
-		my_usleep(data->time_to_sleep);
-		print_status(data, philo->id, "is thinking");
+		sleeping(philo, data);
 	}
 	return (NULL);
 }
@@ -109,7 +125,6 @@ void	monitor(t_data *data)
 			set_bool(&data->mutex, &data->simulation_end, true);
 			return ;
 		}
-		usleep(1000);
 	}
 }
 
