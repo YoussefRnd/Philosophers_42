@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/31 17:05:47 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:37:56 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,10 @@ void					init_data(t_data *data);
 
 void					start_simulation(t_data *data);
 
-void					set_value(pthread_mutex_t *mutex, long *arg,
-							long value);
+void					set_long(pthread_mutex_t *mutex, long *arg, long value);
 void					set_bool(pthread_mutex_t *mutex, bool *arg, bool value);
 
-long					get_value(pthread_mutex_t *mutex, long *arg);
+long					get_long(pthread_mutex_t *mutex, long *arg);
 bool					get_bool(pthread_mutex_t *mutex, bool *arg);
 
 #endif

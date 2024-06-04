@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:24:28 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/31 16:52:29 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:38:22 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,9 @@ void	init_data(t_data *data)
 		data->philo[i].is_philo_full = false;
 		if (pthread_mutex_init(&data->fork[i], NULL) != 0)
 			error("Error: mutex init failed");
-		data->philo[i].left_fork = &data->fork[(i + 1) % data->number_of_philo];
-		data->philo[i].right_fork = &data->fork[i];
-		if (data->philo->id % 2 == 0)
-		{
-			data->philo[i].right_fork = &data->fork[(i + 1)
-				% data->number_of_philo];
-			data->philo[i].left_fork = &data->fork[i];
-		}
+		data->philo[i].right_fork = &data->fork[(i + 1)
+			% data->number_of_philo];
+		data->philo[i].left_fork = &data->fork[i];
 		i++;
 	}
 }
