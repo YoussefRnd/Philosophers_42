@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/03 16:37:56 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:02:06 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_philo
 	pthread_mutex_t		*left_fork;
 	bool				is_philo_full;
 	long				last_meal;
-	int					meals_eaten;
+	long				meals_eaten;
 	t_data				*data;
 }						t_philo;
 
