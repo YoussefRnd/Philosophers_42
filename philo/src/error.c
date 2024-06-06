@@ -6,14 +6,14 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:31:50 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/05/25 16:32:40 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/06 16:27:03 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	error(char *message)
+int	error(char *msg)
 {
-	printf("%s\n", message);
-	exit(1);
+	printf("%s\n", msg);
+	return (-1);
 }

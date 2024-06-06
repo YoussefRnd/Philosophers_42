@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/05 17:19:49 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:28:47 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ long	get_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		error("Error: gettimeofday failed");
+		return (error("Error: gettimeofday failed"));
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
@@ -34,15 +34,15 @@ void	print_status(t_data *data, int id, char *status)
 	pthread_mutex_unlock(&data->print_mutex);
 }
 
-void	_usleep(int ms)
+void    _usleep(int ms)
 {
-	long	start_time;
-	long	end_time;
+    long    start_time;
+    long    end_time;
 
-	start_time = get_time();
-	end_time = start_time + ms;
-	while (get_time() < end_time)
-		usleep(85);
+    start_time = get_time();
+    end_time = start_time + ms;
+    while (get_time() < end_time)
+        usleep(85);
 }
 
 void	eating(t_philo *philo, t_data *data)
@@ -93,12 +93,9 @@ void	*routine(void *arg)
 		thinking(philo, data);
 		eating(philo, data);
 		sleeping(philo, data);
-		if (data->philo_eat_frequency != -1
-			&& philo->meals_eaten >= data->philo_eat_frequency)
-		{
-			set_bool(&data->mutex, &philo->is_philo_full, true);
+		if (data->philo_eat_frequency != -1 && get_long(&data->mutex,
+				&philo->meals_eaten) >= data->philo_eat_frequency)
 			break ;
-		}
 	}
 	return (NULL);
 }
@@ -112,7 +109,8 @@ void	monitor(t_data *data)
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
 		full_philosophers = 0;
-		for (i = 0; i < data->number_of_philo; i++)
+		i = 0;
+		while (i < data->number_of_philo)
 		{
 			time = get_time();
 			if (time - get_long(&data->mutex,
@@ -122,8 +120,10 @@ void	monitor(t_data *data)
 				set_bool(&data->mutex, &data->simulation_end, true);
 				return ;
 			}
-			if (get_bool(&data->mutex, &data->philo[i].is_philo_full))
+			if (data->philo_eat_frequency != -1 && get_long(&data->mutex,
+					&data->philo[i].meals_eaten) >= data->philo_eat_frequency)
 				full_philosophers++;
+			i++;
 		}
 		if (full_philosophers == data->number_of_philo)
 		{
@@ -133,27 +133,31 @@ void	monitor(t_data *data)
 	}
 }
 
-void	start_simulation(t_data *data)
+int	start_simulation(t_data *data)
 {
 	int	i;
 
-	data->start_time = get_time();
-	data->simulation_end = false;
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->mutex, NULL);
-	for (i = 0; i < data->number_of_philo; i++)
+	data->start_time = get_time();
+	i = 0;
+	while (i < data->number_of_philo)
 	{
 		data->philo[i].last_meal = data->start_time;
 		if (pthread_create(&data->philo[i].thread, NULL, &routine,
 				&data->philo[i]) != 0)
-			error("Error: pthread_create failed");
+			return (error("Error: pthread_create failed"));
+		i++;
 	}
 	monitor(data);
-	for (i = 0; i < data->number_of_philo; i++)
+	i = 0;
+	while (i < data->number_of_philo)
 	{
 		if (pthread_join(data->philo[i].thread, NULL) != 0)
-			error("Error: pthread_join failed");
+			return (error("Error: pthread_join failed"));
+		i++;
 	}
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->mutex);
+	return (0);
 }
