@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 10:36:00 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/06 16:27:32 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/08 11:06:09 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ static char	*is_valid(char *str)
 		error("Error: negative number");
 		return (NULL);
 	}
-	while (!is_digit(*str))
+	number = str;
+	while (is_digit(*str))
+		str++;
+	if (*str)
 	{
 		error("Error: invalid number");
 		return (NULL);
 	}
-	number = str;
 	return (number);
 }
 

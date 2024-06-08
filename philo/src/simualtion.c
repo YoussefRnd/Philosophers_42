@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/06 20:28:47 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/08 15:53:42 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,36 @@ void	print_status(t_data *data, int id, char *status)
 	pthread_mutex_unlock(&data->print_mutex);
 }
 
-void    _usleep(int ms)
+void	_usleep(int ms)
 {
-    long    start_time;
-    long    end_time;
+	long	start_time;
+	long	end_time;
 
-    start_time = get_time();
-    end_time = start_time + ms;
-    while (get_time() < end_time)
-        usleep(85);
+	start_time = get_time();
+	end_time = start_time + ms;
+	while (get_time() < end_time)
+		usleep(85);
 }
 
 void	eating(t_philo *philo, t_data *data)
 {
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(&data->fork[philo->right_fork]);
 	print_status(data, philo->id, "has taken a fork");
 	if (data->number_of_philo == 1)
 	{
 		_usleep(data->time_to_die);
 		print_status(data, philo->id, "died");
-		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(&data->fork[philo->right_fork]);
 		set_bool(&data->mutex, &data->simulation_end, true);
 		return ;
 	}
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(&data->fork[philo->left_fork]);
 	print_status(data, philo->id, "has taken a fork");
-	print_status(data, philo->id, "is eating");
 	set_long(&data->mutex, &philo->last_meal, get_time());
+	print_status(data, philo->id, "is eating");
 	_usleep(data->time_to_eat);
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(&data->fork[philo->right_fork]);
+	pthread_mutex_unlock(&data->fork[philo->left_fork]);
 	set_long(&data->mutex, &philo->meals_eaten, get_long(&data->mutex,
 			&philo->meals_eaten) + 1);
 }
@@ -72,11 +72,15 @@ void	sleeping(t_philo *philo, t_data *data)
 {
 	print_status(data, philo->id, "is sleeping");
 	_usleep(data->time_to_sleep);
+	if (get_bool(&data->mutex, &data->simulation_end))
+		return ;
 }
 
 void	thinking(t_philo *philo, t_data *data)
 {
 	print_status(data, philo->id, "is thinking");
+	if (get_bool(&data->mutex, &data->simulation_end))
+		return ;
 }
 
 void	*routine(void *arg)
@@ -137,8 +141,6 @@ int	start_simulation(t_data *data)
 {
 	int	i;
 
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->mutex, NULL);
 	data->start_time = get_time();
 	i = 0;
 	while (i < data->number_of_philo)
@@ -157,7 +159,5 @@ int	start_simulation(t_data *data)
 			return (error("Error: pthread_join failed"));
 		i++;
 	}
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->mutex);
 	return (0);
 }

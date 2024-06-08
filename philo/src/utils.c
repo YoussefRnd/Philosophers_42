@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:45:56 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/06 16:12:39 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/08 12:45:41 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,4 @@ bool	get_bool(pthread_mutex_t *mutex, bool *arg)
 	value = *arg;
 	pthread_mutex_unlock(mutex);
 	return (value);
-}
-
-void	set_int(pthread_mutex_t *mutex, int *arg, int value)
-{
-	pthread_mutex_lock(mutex);
-	*arg = value;
-	pthread_mutex_unlock(mutex);
 }
