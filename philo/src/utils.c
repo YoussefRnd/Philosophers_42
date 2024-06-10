@@ -6,42 +6,41 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:45:56 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/08 12:45:41 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/10 17:17:23 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	set_long(pthread_mutex_t *mutex, long *arg, long value)
+long	get_time(void)
 {
-	pthread_mutex_lock(mutex);
-	*arg = value;
-	pthread_mutex_unlock(mutex);
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (error("Error: gettimeofday failed"));
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-long	get_long(pthread_mutex_t *mutex, long *arg)
+void	print_status(t_data *data, int id, char *status)
 {
-	long	value;
+	long	timestamp;
 
-	pthread_mutex_lock(mutex);
-	value = *arg;
-	pthread_mutex_unlock(mutex);
-	return (value);
+	pthread_mutex_lock(&data->print_mutex);
+	if (!get_bool(&data->mutex, &data->simulation_end))
+	{
+		timestamp = get_time() - data->start_time;
+		printf("%ld %d %s\n", timestamp, id, status);
+	}
+	pthread_mutex_unlock(&data->print_mutex);
 }
 
-void	set_bool(pthread_mutex_t *mutex, bool *arg, bool value)
+void	_usleep(int ms)
 {
-	pthread_mutex_lock(mutex);
-	*arg = value;
-	pthread_mutex_unlock(mutex);
-}
+	long	start_time;
+	long	end_time;
 
-bool	get_bool(pthread_mutex_t *mutex, bool *arg)
-{
-	bool	value;
-
-	pthread_mutex_lock(mutex);
-	value = *arg;
-	pthread_mutex_unlock(mutex);
-	return (value);
+	start_time = get_time();
+	end_time = start_time + ms;
+	while (get_time() < end_time)
+		usleep(100);
 }

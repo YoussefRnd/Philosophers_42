@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/09 16:53:17 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/10 17:04:29 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ typedef struct s_data
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					meals_limit;
-	long				start_time;
 	t_philo				*philo;
 	pthread_mutex_t		*fork;
+	long				start_time;
 	bool				simulation_end;
 	pthread_mutex_t		print_mutex;
 	pthread_mutex_t		mutex;
@@ -62,5 +62,11 @@ void					set_bool(pthread_mutex_t *mutex, bool *arg, bool value);
 
 long					get_long(pthread_mutex_t *mutex, long *arg);
 bool					get_bool(pthread_mutex_t *mutex, bool *arg);
+
+long					get_time(void);
+
+void					print_status(t_data *data, int id, char *status);
+
+void					_usleep(int ms);
 
 #endif
