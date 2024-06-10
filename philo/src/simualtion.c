@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/08 15:53:42 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/09 17:41:06 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,11 @@ void	sleeping(t_philo *philo, t_data *data)
 {
 	print_status(data, philo->id, "is sleeping");
 	_usleep(data->time_to_sleep);
-	if (get_bool(&data->mutex, &data->simulation_end))
-		return ;
 }
 
 void	thinking(t_philo *philo, t_data *data)
 {
 	print_status(data, philo->id, "is thinking");
-	if (get_bool(&data->mutex, &data->simulation_end))
-		return ;
 }
 
 void	*routine(void *arg)
@@ -97,8 +93,8 @@ void	*routine(void *arg)
 		thinking(philo, data);
 		eating(philo, data);
 		sleeping(philo, data);
-		if (data->philo_eat_frequency != -1 && get_long(&data->mutex,
-				&philo->meals_eaten) >= data->philo_eat_frequency)
+		if (data->meals_limit != -1 && get_long(&data->mutex,
+				&philo->meals_eaten) >= data->meals_limit)
 			break ;
 	}
 	return (NULL);
@@ -109,6 +105,7 @@ void	monitor(t_data *data)
 	int		i;
 	long	time;
 	int		full_philosophers;
+	long	last_meal_time;
 
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
@@ -117,15 +114,15 @@ void	monitor(t_data *data)
 		while (i < data->number_of_philo)
 		{
 			time = get_time();
-			if (time - get_long(&data->mutex,
-					&data->philo[i].last_meal) >= data->time_to_die)
+			last_meal_time = get_long(&data->mutex, &data->philo[i].last_meal);
+			if (time - last_meal_time >= data->time_to_die)
 			{
 				print_status(data, data->philo[i].id, "died");
 				set_bool(&data->mutex, &data->simulation_end, true);
 				return ;
 			}
-			if (data->philo_eat_frequency != -1 && get_long(&data->mutex,
-					&data->philo[i].meals_eaten) >= data->philo_eat_frequency)
+			if (data->meals_limit != -1 && get_long(&data->mutex,
+					&data->philo[i].meals_eaten) >= data->meals_limit)
 				full_philosophers++;
 			i++;
 		}

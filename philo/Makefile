@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=address
+# CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=thread
 CFLAGS = -Wall -Wextra -Werror -pthread 
 RM = rm -fr
 MKDIR = mkdir -p
@@ -16,7 +16,7 @@ OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/philo.h
 	@$(MKDIR) $(OBJ_DIR)
 	@echo "Compiling $<..."
 	@$(CC) $(CFLAGS) -c $< -o $@

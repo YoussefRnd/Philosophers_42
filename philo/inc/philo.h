@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/08 12:45:20 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/09 16:53:17 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_data
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
-	int					philo_eat_frequency;
+	int					meals_limit;
 	long				start_time;
 	t_philo				*philo;
 	pthread_mutex_t		*fork;

@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 10:36:00 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/08 11:06:09 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/09 17:10:17 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ int	parse_args(t_data *data, char **argv)
 		return (error("Error: time must be at least 60ms"));
 	if (argv[5])
 	{
-		data->philo_eat_frequency = ft_atol(argv[5]);
-		if (data->philo_eat_frequency == -1)
+		data->meals_limit = ft_atol(argv[5]);
+		if (data->meals_limit == -1)
 			return (-1);
 	}
 	else
-		data->philo_eat_frequency = -1;
+		data->meals_limit = -1;
 	return (0);
 }
