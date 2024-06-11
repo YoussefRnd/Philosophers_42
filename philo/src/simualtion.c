@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/10 17:34:39 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/11 11:26:50 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,23 @@
 
 void	eating(t_philo *philo, t_data *data)
 {
-	if (philo->right_fork < philo->left_fork)
+	pthread_mutex_lock(&data->fork[philo->right_fork]);
+	print_status(data, philo->id, "has taken a fork");
+	if (data->number_of_philo == 1)
 	{
-		pthread_mutex_lock(&data->fork[philo->right_fork]);
-		print_status(data, philo->id, "has taken a fork");
-		if (data->number_of_philo != 1)
-		{
-			pthread_mutex_lock(&data->fork[philo->left_fork]);
-			print_status(data, philo->id, "has taken a fork");
-		}
+		_usleep(data->time_to_die);
+		print_status(data, philo->id, "died");
+		pthread_mutex_unlock(&data->fork[philo->right_fork]);
+		set_bool(&data->mutex, &data->simulation_end, true);
+		return ;
 	}
-	else
-	{
-		pthread_mutex_lock(&data->fork[philo->left_fork]);
-		print_status(data, philo->id, "has taken a fork");
-		if (data->number_of_philo != 1)
-		{
-			pthread_mutex_lock(&data->fork[philo->right_fork]);
-			print_status(data, philo->id, "has taken a fork");
-		}
-	}
+	pthread_mutex_lock(&data->fork[philo->left_fork]);
+	print_status(data, philo->id, "has taken a fork");
 	set_long(&data->mutex, &philo->last_meal, get_time());
 	print_status(data, philo->id, "is eating");
 	_usleep(data->time_to_eat);
-	pthread_mutex_unlock(&data->fork[philo->right_fork]);
 	pthread_mutex_unlock(&data->fork[philo->left_fork]);
+	pthread_mutex_unlock(&data->fork[philo->right_fork]);
 	set_long(&data->mutex, &philo->meals_eaten, get_long(&data->mutex,
 			&philo->meals_eaten) + 1);
 }
@@ -61,6 +53,8 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
+	if (philo->id % 2 == 0)
+		sleeping(philo, data);
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
 		thinking(philo, data);
@@ -104,7 +98,7 @@ void	monitor(t_data *data)
 			set_bool(&data->mutex, &data->simulation_end, true);
 			return ;
 		}
-		usleep(1000);
+		usleep(100);
 	}
 }
 
