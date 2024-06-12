@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/11 11:26:50 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:40:30 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	*routine(void *arg)
 		thinking(philo, data);
 		eating(philo, data);
 		sleeping(philo, data);
-		if (data->meals_limit != -1 && get_long(&data->mutex,
-				&philo->meals_eaten) >= data->meals_limit)
-			break ;
+		// if (data->meals_limit != -1 && get_long(&data->mutex,
+		// 		&philo->meals_eaten) >= data->meals_limit)
+		// 	break ;
 	}
 	return (NULL);
 }
