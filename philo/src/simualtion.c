@@ -31,8 +31,7 @@ void	eating(t_philo *philo, t_data *data)
 	_usleep(data->time_to_eat);
 	pthread_mutex_unlock(&data->fork[philo->left_fork]);
 	pthread_mutex_unlock(&data->fork[philo->right_fork]);
-	set_long(&data->mutex, &philo->meals_eaten, get_long(&data->mutex,
-			&philo->meals_eaten) + 1);
+	philo->meals_eaten++;
 }
 
 void	sleeping(t_philo *philo, t_data *data)

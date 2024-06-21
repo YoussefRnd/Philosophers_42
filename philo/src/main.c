@@ -16,6 +16,7 @@ void	free_data(t_data *data)
 {
 	int	i;
 
+	i = 0;
 	if (data->philo)
 	{
 		free(data->philo);
@@ -23,9 +24,10 @@ void	free_data(t_data *data)
 	}
 	if (data->fork)
 	{
-		for (i = 0; i < data->number_of_philo; i++)
+		while (i < data->number_of_philo)
 		{
 			pthread_mutex_destroy(&data->fork[i]);
+			i++;
 		}
 		free(data->fork);
 		data->fork = NULL;
