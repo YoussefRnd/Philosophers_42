@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/13 16:57:28 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/21 22:10:21 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,6 @@ void	sleeping(t_philo *philo, t_data *data)
 	_usleep(data->time_to_sleep);
 }
 
-void	thinking(t_philo *philo, t_data *data)
-{
-	print_status(data, philo->id, "is thinking");
-}
-
 void	*routine(void *arg)
 {
 	t_philo	*philo;
@@ -56,7 +51,7 @@ void	*routine(void *arg)
 		sleeping(philo, data);
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
-		thinking(philo, data);
+		print_status(data, philo->id, "is thinking");
 		eating(philo, data);
 		sleeping(philo, data);
 	}
@@ -65,20 +60,17 @@ void	*routine(void *arg)
 
 void	monitor(t_data *data)
 {
-	int		i;
-	long	time;
-	int		full_philosophers;
-	long	last_meal_time;
+	int	i;
+	int	full_philosophers;
 
 	while (!get_bool(&data->mutex, &data->simulation_end))
 	{
 		full_philosophers = 0;
-		i = 0;
-		while (i < data->number_of_philo)
+		i = -1;
+		while (++i < data->number_of_philo)
 		{
-			time = get_time();
-			last_meal_time = get_long(&data->mutex, &data->philo[i].last_meal);
-			if (time - last_meal_time >= data->time_to_die)
+			if (get_time() - get_long(&data->mutex,
+					&data->philo[i].last_meal) >= data->time_to_die)
 			{
 				print_status(data, data->philo[i].id, "died");
 				set_bool(&data->mutex, &data->simulation_end, true);
@@ -87,13 +79,9 @@ void	monitor(t_data *data)
 			if (data->meals_limit != -1 && get_long(&data->mutex,
 					&data->philo[i].meals_eaten) >= data->meals_limit)
 				full_philosophers++;
-			i++;
 		}
 		if (full_philosophers == data->number_of_philo)
-		{
 			set_bool(&data->mutex, &data->simulation_end, true);
-			return ;
-		}
 		usleep(100);
 	}
 }
