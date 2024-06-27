@@ -6,13 +6,13 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/21 22:10:21 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:49:18 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	eating(t_philo *philo, t_data *data)
+void eating(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->fork[philo->right_fork]);
 	print_status(data, philo->id, "has taken a fork");
@@ -29,9 +29,9 @@ void	eating(t_philo *philo, t_data *data)
 	set_long(&data->mutex, &philo->last_meal, get_time());
 	print_status(data, philo->id, "is eating");
 	_usleep(data->time_to_eat);
+	philo->meals_eaten++;
 	pthread_mutex_unlock(&data->fork[philo->left_fork]);
 	pthread_mutex_unlock(&data->fork[philo->right_fork]);
-	philo->meals_eaten++;
 }
 
 void	sleeping(t_philo *philo, t_data *data)
@@ -73,7 +73,6 @@ void	monitor(t_data *data)
 					&data->philo[i].last_meal) >= data->time_to_die)
 			{
 				print_status(data, data->philo[i].id, "died");
-				set_bool(&data->mutex, &data->simulation_end, true);
 				return ;
 			}
 			if (data->meals_limit != -1 && get_long(&data->mutex,

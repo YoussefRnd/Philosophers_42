@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:45:56 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/10 17:17:23 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/27 17:19:14 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	print_status(t_data *data, int id, char *status)
 	{
 		timestamp = get_time() - data->start_time;
 		printf("%ld %d %s\n", timestamp, id, status);
+		if (!strcmp(status, "died"))
+			set_bool(&data->mutex, &data->simulation_end, true);
 	}
 	pthread_mutex_unlock(&data->print_mutex);
 }
