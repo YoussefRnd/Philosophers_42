@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:16:52 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/28 17:01:37 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/30 12:46:01 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	free_data(t_data *data)
 {
 	int	i;
 
-	i = 0;
 	if (data->philo)
 	{
 		free(data->philo);
@@ -24,16 +23,21 @@ void	free_data(t_data *data)
 	}
 	if (data->fork)
 	{
+		i = 0;
 		while (i < data->number_of_philo)
 		{
 			sem_post(data->fork);
 			i++;
 		}
-		free(data->fork);
+		sem_close(data->fork);
 		data->fork = NULL;
 	}
-	sem_post(data->print_mutex);
-	sem_post(data->mutex);
+	if (data->print_sem)
+	{
+		sem_post(data->print_sem);
+		sem_close(data->print_sem);
+		data->print_sem = NULL;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -42,17 +46,14 @@ int	main(int argc, char **argv)
 
 	if (argc == 5 || argc == 6)
 	{
-		if (parse_args(&data, argv) == -1)
-			return (1);
-		if (init_data(&data) == -1)
-			return (1);
-		if (start_simulation(&data) == -1)
-			return (1);
-		// free_data(&data);
+		parse_args(&data, argv);
+		init_data(&data);
+		start_simulation(&data);
+		free_data(&data);
 	}
 	else
 	{
-		return (1);
+		error("Error: Invalid number of arguments");
 	}
 	return (0);
 }

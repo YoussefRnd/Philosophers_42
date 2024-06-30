@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/28 19:51:40 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/06/30 19:49:40 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	eating(t_philo *philo, t_data *data)
 		_usleep(data->time_to_die);
 		print_status(data, philo->id, "died");
 		sem_post(data->fork);
-		data->simulation_end = true;
-		return ;
+		sem_post(data->death);
+		exit(0);
 	}
 	sem_wait(data->fork);
 	print_status(data, philo->id, "has taken a fork");
@@ -53,16 +53,14 @@ void	*monitor_philosopher(void *arg)
 		{
 			print_status(data, philo->id, "died");
 			sem_post(data->death);
-			kill(0, SIGTERM);
-			return (NULL);
+			exit(0);
 		}
 		if (data->meals_limit != -1 && philo->meals_eaten >= data->meals_limit)
 		{
 			sem_post(data->death);
-			kill(0, SIGTERM);
-			return (NULL);
+			exit(0);
 		}
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -72,10 +70,7 @@ void	routine(t_philo *philo, t_data *data)
 	pthread_t	monitor_thread;
 
 	if (pthread_create(&monitor_thread, NULL, &monitor_philosopher, philo) != 0)
-	{
-		perror("Error: pthread_create failed");
-		return ;
-	}
+		error("Error: pthread_create failed");
 	pthread_detach(monitor_thread);
 	if (philo->id % 2 == 0)
 		sleeping(philo, data);
@@ -84,39 +79,43 @@ void	routine(t_philo *philo, t_data *data)
 		print_status(data, philo->id, "is thinking");
 		eating(philo, data);
 		sleeping(philo, data);
-		if (data->simulation_end)
-			break ;
+	}
+	exit(0);
+}
+
+void	kill_suckers(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		kill(data->philo[i].pid, SIGKILL);
+		i++;
 	}
 }
 
-int	start_simulation(t_data *data)
+void	start_simulation(t_data *data)
 {
-	int i;
-	pid_t pid;
+	int		i;
+	pid_t	pid;
 
 	data->start_time = get_time();
-	i = 0;
-	while (i < data->number_of_philo)
+	i = -1;
+	while (++i < data->number_of_philo)
 	{
 		pid = fork();
 		data->philo[i].last_meal = data->start_time;
 		if (pid < 0)
-		{
-			perror("Error: fork failed");
-			return (-1);
-		}
+			error("Error: fork failed");
 		else if (pid == 0)
 		{
 			routine(&data->philo[i], data);
 			exit(0);
 		}
-		i++;
+		else
+			data->philo[i].pid = pid;
 	}
-	i = 0;
-	while (i < data->number_of_philo)
-	{
-		wait(NULL);
-		i++;
-	}
-	return (0);
+	if (waitpid(0, NULL, 0) > 0)
+		kill_suckers(data);
 }
