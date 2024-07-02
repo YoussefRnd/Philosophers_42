@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:24:28 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/30 12:38:50 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:57:00 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ int	init_data(t_data *data)
 	if (!data->philo)
 		error("Error: malloc failed");
 	i = 0;
-	sem_unlink("/fork");
-	data->fork = sem_open("/fork", O_CREAT, 0644, data->number_of_philo);
 	while (i < data->number_of_philo)
 	{
 		data->philo[i].data = data;
@@ -29,9 +27,13 @@ int	init_data(t_data *data)
 		data->philo[i].meals_eaten = 0;
 		i++;
 	}
+	sem_unlink("/fork");
+	data->fork = sem_open("/fork", O_CREAT, 0644, data->number_of_philo);
 	sem_unlink("/print_sem");
 	data->print_sem = sem_open("/print_sem", O_CREAT, 0644, 1);
 	sem_unlink("/death");
 	data->death = sem_open("/death", O_CREAT, 0644, 0);
+	sem_unlink("/death_lock");
+	data->death_lock = sem_open("/death_lock", O_CREAT, 0644, 1);
 	return (0);
 }

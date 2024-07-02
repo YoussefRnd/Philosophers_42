@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:16:52 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/30 12:46:01 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:43:25 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	free_data(t_data *data)
 {
-	int	i;
-
 	if (data->philo)
 	{
 		free(data->philo);
@@ -23,20 +21,27 @@ void	free_data(t_data *data)
 	}
 	if (data->fork)
 	{
-		i = 0;
-		while (i < data->number_of_philo)
-		{
-			sem_post(data->fork);
-			i++;
-		}
 		sem_close(data->fork);
+		sem_unlink("/fork");
 		data->fork = NULL;
 	}
 	if (data->print_sem)
 	{
-		sem_post(data->print_sem);
 		sem_close(data->print_sem);
+		sem_unlink("/print_sem");
 		data->print_sem = NULL;
+	}
+	if (data->death)
+	{
+		sem_close(data->death);
+		sem_unlink("/death");
+		data->death = NULL;
+	}
+	if (data->death_lock)
+	{
+		sem_close(data->death_lock);
+		sem_unlink("/death_lock");
+		data->death_lock = NULL;
 	}
 }
 

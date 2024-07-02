@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/30 16:08:19 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:36:02 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ typedef struct s_data
 	t_philo				*philo;
 	sem_t				*fork;
 	long				start_time;
-	int					is_dead;
 	sem_t				*death;
+	sem_t				*death_lock;
 	sem_t				*print_sem;
 }						t_data;
 
@@ -63,5 +63,7 @@ long					get_time(void);
 void					print_status(t_data *data, int id, char *status);
 
 void					_usleep(int ms);
+
+void					kill_processes(t_data *data);
 
 #endif

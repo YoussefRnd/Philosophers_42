@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/30 19:49:40 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:34:24 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,18 @@ void	*monitor_philosopher(void *arg)
 	{
 		if (get_time() - philo->last_meal >= data->time_to_die)
 		{
+			sem_wait(data->death_lock);
 			print_status(data, philo->id, "died");
 			sem_post(data->death);
 			exit(0);
 		}
 		if (data->meals_limit != -1 && philo->meals_eaten >= data->meals_limit)
 		{
+			sem_wait(data->death_lock);
 			sem_post(data->death);
 			exit(0);
 		}
-		usleep(1000);
+		usleep(999);
 	}
 	return (NULL);
 }
@@ -79,19 +81,6 @@ void	routine(t_philo *philo, t_data *data)
 		print_status(data, philo->id, "is thinking");
 		eating(philo, data);
 		sleeping(philo, data);
-	}
-	exit(0);
-}
-
-void	kill_suckers(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->number_of_philo)
-	{
-		kill(data->philo[i].pid, SIGKILL);
-		i++;
 	}
 }
 
@@ -117,5 +106,8 @@ void	start_simulation(t_data *data)
 			data->philo[i].pid = pid;
 	}
 	if (waitpid(0, NULL, 0) > 0)
-		kill_suckers(data);
+	{
+		sem_wait(data->death);
+		kill_processes(data);
+	}
 }
