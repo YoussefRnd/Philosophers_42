@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:45:56 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/07/02 16:35:39 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/04 15:55:29 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,4 @@ void	_usleep(int ms)
 	end_time = start_time + ms;
 	while (get_time() < end_time)
 		usleep(100);
-}
-
-void	kill_processes(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->number_of_philo)
-	{
-		kill(data->philo[i].pid, SIGTERM);
-		i++;
-	}
 }

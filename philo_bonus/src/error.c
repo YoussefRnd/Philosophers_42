@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:31:50 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/30 11:59:08 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/04 15:55:40 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,17 @@ void	error(char *msg)
 {
 	printf("%s\n", msg);
 	exit(0);
+}
+
+void	kill_processes(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		kill(data->philo[i].pid, SIGTERM);
+		waitpid(data->philo[i].pid, NULL, 0);
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:24:28 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/07/02 15:57:00 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/04 15:53:51 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ int	init_data(t_data *data)
 	data->philo = malloc(sizeof(t_philo) * data->number_of_philo);
 	if (!data->philo)
 		error("Error: malloc failed");
-	i = 0;
-	while (i < data->number_of_philo)
+	i = -1;
+	while (++i < data->number_of_philo)
 	{
 		data->philo[i].data = data;
 		data->philo[i].id = i + 1;
 		data->philo[i].meals_eaten = 0;
-		i++;
 	}
 	sem_unlink("/fork");
 	data->fork = sem_open("/fork", O_CREAT, 0644, data->number_of_philo);
@@ -35,5 +34,9 @@ int	init_data(t_data *data)
 	data->death = sem_open("/death", O_CREAT, 0644, 0);
 	sem_unlink("/death_lock");
 	data->death_lock = sem_open("/death_lock", O_CREAT, 0644, 1);
+	sem_unlink("/philo_finished");
+	data->philo_finished = sem_open("/philo_finished", O_CREAT, 0644, 0);
+	sem_unlink("/last_meal_sem");
+	data->last_meal_sem = sem_open("/last_meal_sem", O_CREAT, 0644, 1);
 	return (0);
 }
