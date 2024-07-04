@@ -6,13 +6,13 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/28 11:07:55 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/04 15:53:24 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void eating(t_philo *philo, t_data *data)
+void	eating(t_philo *philo, t_data *data)
 {
 	pthread_mutex_lock(&data->fork[philo->right_fork]);
 	print_status(data, philo->id, "has taken a fork");

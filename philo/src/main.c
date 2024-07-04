@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:16:52 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/09 12:32:50 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:27:52 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		return (1);
+		printf("Error: Invalid number of arguments\n");
+        return (1);
 	}
 	return (0);
 }
