@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/06/27 16:57:03 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/05 19:21:01 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ long					get_time(void);
 
 void					print_status(t_data *data, int id, char *status);
 
-void					_usleep(int ms);
+void					_usleep(int ms, t_data *data);
 
 #endif

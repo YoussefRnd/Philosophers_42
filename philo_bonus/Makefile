@@ -1,8 +1,8 @@
-NAME = philo
+NAME = philo_bonus
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=thread
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 RM = rm -fr
 MKDIR = mkdir -p
