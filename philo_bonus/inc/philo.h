@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/07/04 15:50:33 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:42:47 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_data
 	sem_t				*print_sem;
 	sem_t				*philo_finished;
 	sem_t				*last_meal_sem;
+	sem_t				*start_barrier;
 }						t_data;
 
 int						parse_args(t_data *data, char **argv);
@@ -60,6 +61,7 @@ int						parse_args(t_data *data, char **argv);
 int						init_data(t_data *data);
 
 void					start_simulation(t_data *data);
+void					create_philosopher(t_data *data, int i);
 
 void					*meals_monitor(void *arg);
 void					*death_monitor(void *arg);

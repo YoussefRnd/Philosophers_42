@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:47:53 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/07/04 16:37:44 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:40:37 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	eating(t_philo *philo, t_data *data)
 	print_status(data, philo->id, "has taken a fork");
 	sem_wait(data->last_meal_sem);
 	philo->last_meal = get_time();
-	sem_post(data->last_meal_sem);
 	print_status(data, philo->id, "is eating");
+	sem_post(data->last_meal_sem);
 	_usleep(data->time_to_eat);
 	philo->meals_eaten++;
 	if (data->meals_limit != -1 && philo->meals_eaten == data->meals_limit)
@@ -56,7 +56,6 @@ void	routine(t_philo *philo, t_data *data)
 void	start_simulation(t_data *data)
 {
 	int			i;
-	pid_t		pid;
 	pthread_t	monitor_all_thread;
 
 	if (pthread_create(&monitor_all_thread, NULL, &meals_monitor, data) != 0)
@@ -65,19 +64,7 @@ void	start_simulation(t_data *data)
 	data->start_time = get_time();
 	i = -1;
 	while (++i < data->number_of_philo)
-	{
-		pid = fork();
-		if (pid < 0)
-			error("Error: fork failed");
-		else if (pid == 0)
-		{
-			data->philo[i].last_meal = data->start_time;
-			routine(&data->philo[i], data);
-			exit(0);
-		}
-		else
-			data->philo[i].pid = pid;
-	}
+		create_philosopher(data, i);
 	sem_wait(data->death);
 	kill_processes(data);
 }
