@@ -2,7 +2,7 @@ NAME = philo
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=thread
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 RM = rm -fr
 MKDIR = mkdir -p
 

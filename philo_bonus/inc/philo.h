@@ -6,7 +6,7 @@
 /*   By: yboumlak <yboumlak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:16:45 by yboumlak          #+#    #+#             */
-/*   Updated: 2024/07/06 14:42:47 by yboumlak         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:52:16 by yboumlak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int						init_data(t_data *data);
 
 void					start_simulation(t_data *data);
 void					create_philosopher(t_data *data, int i);
+void					routine(t_philo *philo, t_data *data);
 
 void					*meals_monitor(void *arg);
 void					*death_monitor(void *arg);
